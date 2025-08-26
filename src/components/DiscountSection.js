@@ -49,7 +49,7 @@ export default function DiscountSection() {
             <Typography
               variant="h1"
               component="h1"
-              sx={{ fontWeight: 'bold', color: '#bb268c' }}
+              sx={{ fontWeight: 'bold', color: '#414041' }}
             >
               50% off
             </Typography>
@@ -72,8 +72,7 @@ export default function DiscountSection() {
               variant="contained"
               sx={{
                 width: { xs: '80%', sm: '60%', md: '50%' },
-                backgroundColor: '#bb268c',
-                '&:hover': { backgroundColor: '#f0768c' },
+                backgroundColor: '#414041',
               }}
             >
               ADD TO CART

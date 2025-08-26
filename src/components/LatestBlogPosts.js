@@ -41,17 +41,20 @@ export default function LatestBlogPosts() {
         mt={7}
         justifyContent="center"
         alignItems="stretch"
+        flexWrap="wrap" // optional: allows wrapping on smaller screens
       >
         {blogPosts.map((post) => (
           <Box
             key={post.id}
             sx={{
               display: 'flex',
-              flexDirection: 'column', // 👈 stack image above content
+              flexDirection: 'column',
               width: { xs: '100%', md: '30%' },
+              maxWidth: 400,  // limit maximum width to prevent stretching
               borderRadius: 2,
               overflow: 'hidden',
               bgcolor: '#fff',
+              mx: 'auto',     // center cards if smaller than container
             }}
           >
             {/* Image */}
@@ -88,11 +91,7 @@ export default function LatestBlogPosts() {
                 <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
                   {post.title}
                 </Typography>
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  sx={{ mt: 1 }}
-                >
+                <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
                   {post.subtitle}
                 </Typography>
               </Box>
@@ -112,6 +111,7 @@ export default function LatestBlogPosts() {
           </Box>
         ))}
       </Stack>
+
     </Box>
   );
 }

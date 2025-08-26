@@ -69,6 +69,7 @@ export default function Contact() {
                 color="primary"
                 sx={{
                   mt: 2,
+                  backgroundColor: "#414041",
                   width: { xs: "90vw", md: "50%" }, // 👈 button also full width on mobile
                   ml: { xs: -2, md: 0 },
                 }}

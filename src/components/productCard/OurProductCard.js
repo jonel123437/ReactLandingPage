@@ -52,8 +52,7 @@ export default function OurProductCard({ product, onAddToCart }) {
           variant="contained"
           sx={{
             width: '60%',
-            backgroundColor: '#bb268c',
-            '&:hover': { backgroundColor: '#f0768c' },
+            backgroundColor: '#414041',
           }}
           onClick={() => onAddToCart(product.name)}
         >

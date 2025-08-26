@@ -1,5 +1,6 @@
-import { AppBar, Toolbar, Typography, Button, Box, IconButton, Drawer, List, ListItem, ListItemText } from '@mui/material';
+import { AppBar, Toolbar, Typography, Button, Box, IconButton, Drawer, List, ListItem, ListItemText, Badge } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -8,10 +9,13 @@ export default function Navbar() {
 
   const links = [
     { name: 'Home', path: '/' },
-    { name: 'Shop', path: '/products' },
-    { name: 'Cart', path: '/cart' },
-    { name: 'Checkout', path: '/checkout' },
+    { name: 'About', path: '/about' },
+    { name: 'Product', path: '/products' },
+    { name: 'Support', path: '/support' },
+    { name: 'Account', path: '/account' },
   ];
+
+  const cartPrice = 0;
 
   return (
     <>
@@ -24,13 +28,32 @@ export default function Navbar() {
           </Typography>
 
           {/* Desktop Links */}
-          <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 3 }}>
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 3, alignItems: 'center' }}>
             {links.map(link => (
-              <Button key={link.name} component={Link} to={link.path} sx={{ color: '#fff' }}>
+              <Button
+                key={link.name}
+                component={Link}
+                to={link.path}
+                sx={{
+                  color: '#fff',
+                  textTransform: 'none',  // optional: keep normal case
+                  '&:hover': {
+                    backgroundColor: 'rgba(255,255,255,0.1)', // subtle white overlay
+                  }
+                }}
+              >
                 {link.name}
               </Button>
             ))}
+
+            {/* Cart */}
+            <IconButton component={Link} to="/cart" sx={{ color: '#fff', '&:hover': { backgroundColor: 'rgba(255,255,255,0.1)' } }}>
+              <Badge badgeContent={cartPrice} color="secondary">
+                <ShoppingCartIcon />
+              </Badge>
+            </IconButton>
           </Box>
+
 
           {/* Mobile Hamburger */}
           <IconButton
@@ -50,6 +73,12 @@ export default function Navbar() {
               <ListItemText primary={link.name} />
             </ListItem>
           ))}
+
+          {/* Cart in Drawer */}
+          <ListItem button component={Link} to="/cart" onClick={() => setDrawerOpen(false)}>
+            <ShoppingCartIcon sx={{ mr: 1 }} />
+            <ListItemText primary={`Cart: $${cartPrice}`} />
+          </ListItem>
         </List>
       </Drawer>
     </>

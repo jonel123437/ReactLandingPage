@@ -10,8 +10,6 @@ import LatestBlogPosts from '../components/LatestBlogPosts';
 import FeaturedVideo from '../components/FeaturedVideo';
 import Contact from '../components/Contact';
 
-
-
 export default function Home() {
   return (
     <div className="home-page">
