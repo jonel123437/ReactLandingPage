@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/ReactLandingPage/static/css/main.f5353815.css",
+    "main.js": "/ReactLandingPage/static/js/main.43a6bc89.js",
+    "static/media/image7.png": "/ReactLandingPage/static/media/image7.373b4f9018f4559daa12.png",
+    "static/media/new-product.png": "/ReactLandingPage/static/media/new-product.be0b25f6e8b07b7fbe6d.png",
+    "static/media/hero-shoes.png": "/ReactLandingPage/static/media/hero-shoes.3346dcd69cd98ddb25ff.png",
+    "static/media/image2.png": "/ReactLandingPage/static/media/image2.0833a11e48ad71e70770.png",
+    "static/media/image1.png": "/ReactLandingPage/static/media/image1.9e69096f713aad215843.png",
+    "static/media/image3.png": "/ReactLandingPage/static/media/image3.028812868f2da15fa156.png",
+    "static/media/image4.png": "/ReactLandingPage/static/media/image4.2d386e173a784aadca41.png",
+    "static/media/image5.png": "/ReactLandingPage/static/media/image5.f692a9d42723f03ba1ce.png",
+    "static/media/image6.png": "/ReactLandingPage/static/media/image6.d7cfc6daed6335ee2080.png",
+    "static/media/map.png": "/ReactLandingPage/static/media/map.4400d03d5de7924a8df1.png",
+    "static/media/blogs1.webp": "/ReactLandingPage/static/media/blogs1.e7770d5be90a1eaba5a0.webp",
+    "static/media/blogs2.webp": "/ReactLandingPage/static/media/blogs2.12c237edc695ea8cc5f3.webp",
+    "index.html": "/ReactLandingPage/index.html",
+    "main.f5353815.css.map": "/ReactLandingPage/static/css/main.f5353815.css.map",
+    "main.43a6bc89.js.map": "/ReactLandingPage/static/js/main.43a6bc89.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f5353815.css",
+    "static/js/main.43a6bc89.js"
+  ]
+}
