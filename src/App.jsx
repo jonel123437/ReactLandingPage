@@ -4,7 +4,7 @@ import Login from "./pages/Login";
 
 function App() {
   return (
-    <Router basename="/ReactLandingPage">
+    <Router basename="/lp">
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
