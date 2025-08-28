@@ -13,6 +13,7 @@ export default function Navbar() {
     { name: 'Product', path: '/products' },
     { name: 'Support', path: '/support' },
     { name: 'Account', path: '/account' },
+    { name: 'Login', path: '/login' }, // <-- Added Login link
   ];
 
   const cartPrice = 0;
@@ -36,10 +37,8 @@ export default function Navbar() {
                 to={link.path}
                 sx={{
                   color: '#fff',
-                  textTransform: 'none',  // optional: keep normal case
-                  '&:hover': {
-                    backgroundColor: 'rgba(255,255,255,0.1)', // subtle white overlay
-                  }
+                  textTransform: 'none',
+                  '&:hover': { backgroundColor: 'rgba(255,255,255,0.1)' }
                 }}
               >
                 {link.name}
@@ -53,7 +52,6 @@ export default function Navbar() {
               </Badge>
             </IconButton>
           </Box>
-
 
           {/* Mobile Hamburger */}
           <IconButton
