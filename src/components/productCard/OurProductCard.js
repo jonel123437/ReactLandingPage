@@ -19,7 +19,8 @@ export default function OurProductCard({ product, onAddToCart }) {
     >
       <CardMedia
         component="img"
-        image={product.image}
+        // Use PUBLIC_URL to respect basename
+        image={`${process.env.PUBLIC_URL}${product.image}`}
         alt={product.name}
         sx={{
           width: 250,
@@ -54,7 +55,7 @@ export default function OurProductCard({ product, onAddToCart }) {
             width: '60%',
             backgroundColor: '#414041',
           }}
-          onClick={() => onAddToCart(product.name)}
+          onClick={() => onAddToCart(product)}
         >
           Add to Cart
         </Button>

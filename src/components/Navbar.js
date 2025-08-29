@@ -16,7 +16,15 @@ export default function Navbar() {
   const [loading, setLoading] = useState(false); // loading state
   const navigate = useNavigate();
 
-  const cartPrice = 0;
+const [cartItems, setCartItems] = useState([]);
+
+useEffect(() => {
+  const storedCart = JSON.parse(localStorage.getItem("cart") || "[]");
+  setCartItems(storedCart);
+}, []);
+
+const cartPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+
 
   // On mount, check if user is logged in
   useEffect(() => {
