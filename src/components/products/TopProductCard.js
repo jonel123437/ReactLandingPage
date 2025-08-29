@@ -6,7 +6,7 @@ export default function TopProductCard({ product, onAddToCart }) {
     <Card
       sx={{
         width: 300,
-        height: 350,
+        height: 390,
         backgroundColor: '#fe8b8d',
         transition: 'background-color 0.3s',
         cursor: 'pointer',

@@ -12,6 +12,8 @@ import {
   Typography,
   Button,
   Checkbox,
+  CircularProgress,
+  Tooltip
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
@@ -19,8 +21,9 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useNavigate } from "react-router-dom";
 
-export default function CartList({ cartItems, handleRemove, setCartItems }) {
+export default function CartList({ cartItems, handleRemove, handleQuantityChange }) {
   const [selectedItems, setSelectedItems] = useState([]);
+  const [loadingIds, setLoadingIds] = useState([]);
   const navigate = useNavigate();
 
   // Load selected items from localStorage
@@ -30,26 +33,16 @@ export default function CartList({ cartItems, handleRemove, setCartItems }) {
     setSelectedItems(saved.filter(id => cartIds.includes(id)));
   }, [cartItems]);
 
-  // Update quantity in the database
-  const handleQuantityChange = async (productId, delta) => {
-    try {
-      const res = await fetch("http://localhost:5000/api/cart/update", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ productId, delta }),
-      });
+  const handleIncrease = async (productId) => {
+    setLoadingIds(prev => [...prev, productId]);
+    await handleQuantityChange(productId, 1);
+    setLoadingIds(prev => prev.filter(id => id !== productId));
+  };
 
-      if (!res.ok) {
-        throw new Error("Failed to update quantity.");
-      }
-
-      const data = await res.json();
-      setCartItems(data.cart);
-    } catch (err) {
-      console.error(err);
-      alert("Failed to update quantity.");
-    }
+  const handleDecrease = async (productId) => {
+    setLoadingIds(prev => [...prev, productId]);
+    await handleQuantityChange(productId, -1);
+    setLoadingIds(prev => prev.filter(id => id !== productId));
   };
 
   const handleToggle = (productId) => {
@@ -62,14 +55,6 @@ export default function CartList({ cartItems, handleRemove, setCartItems }) {
     });
   };
 
-  const handleIncrease = (productId) => {
-    handleQuantityChange(productId, 1);
-  };
-
-  const handleDecrease = (productId) => {
-    handleQuantityChange(productId, -1);
-  };
-
   const totalPrice = cartItems
     .filter((item) => selectedItems.includes(item.productId))
     .reduce(
@@ -77,10 +62,15 @@ export default function CartList({ cartItems, handleRemove, setCartItems }) {
       0
     );
 
+  const totalPriceFormatted = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format(totalPrice);
+
   const handleShopNow = () => {
-    navigate("/"); // go to home page
+    navigate("/");
     setTimeout(() => {
-      const section = document.querySelector("#top-products");
+      const section = document.querySelector("#our-products");
       if (section) section.scrollIntoView({ behavior: "smooth" });
     }, 100);
   };
@@ -95,9 +85,18 @@ export default function CartList({ cartItems, handleRemove, setCartItems }) {
         <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>
           Looks like you haven't added any items yet.
         </Typography>
-        <Button variant="contained" color="primary" onClick={handleShopNow}>
+        <Button
+          variant="contained"
+          sx={{
+            backgroundColor: '#414041', 
+            color: '#fff',              
+            '&:hover': { backgroundColor: '#333' } 
+          }}
+          onClick={handleShopNow}
+        >
           Shop Now
         </Button>
+
       </Paper>
     );
   }
@@ -133,17 +132,22 @@ export default function CartList({ cartItems, handleRemove, setCartItems }) {
                 secondary={`$${Number(item.price.replace("$", "")).toFixed(2)} x ${item.quantity}`}
               />
               <Box sx={{ display: "flex", alignItems: "center", ml: 2 }}>
-                <IconButton
-                  onClick={(e) => { e.stopPropagation(); handleDecrease(item.productId); }}
-                  disabled={item.quantity <= 1}
-                >
-                  <RemoveIcon />
-                </IconButton>
+                <Tooltip title={item.quantity <= 1 ? "Minimum quantity is 1" : ""}>
+                  <span>
+                    <IconButton
+                      onClick={(e) => { e.stopPropagation(); handleDecrease(item.productId); }}
+                      disabled={item.quantity <= 1 || loadingIds.includes(item.productId)}
+                    >
+                      {loadingIds.includes(item.productId) ? <CircularProgress size={20} /> : <RemoveIcon />}
+                    </IconButton>
+                  </span>
+                </Tooltip>
                 <Typography sx={{ mx: 1 }}>{item.quantity}</Typography>
                 <IconButton
                   onClick={(e) => { e.stopPropagation(); handleIncrease(item.productId); }}
+                  disabled={loadingIds.includes(item.productId)}
                 >
-                  <AddIcon />
+                  {loadingIds.includes(item.productId) ? <CircularProgress size={20} /> : <AddIcon />}
                 </IconButton>
               </Box>
             </ListItem>
@@ -152,7 +156,7 @@ export default function CartList({ cartItems, handleRemove, setCartItems }) {
         ))}
       </List>
       <Box sx={{ mt: 2, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <Typography variant="h6">Total: ${totalPrice.toFixed(2)}</Typography>
+        <Typography variant="h6">Total: {totalPriceFormatted}</Typography>
         <Button
           variant="contained"
           color="primary"

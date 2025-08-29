@@ -13,51 +13,40 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import LoadingOverlay from "./LoadingOverlay";
+import { CartContext } from "../cart/CartContext";
 
 export default function Navbar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [user, setUser] = useState(null);
-  const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Fetch current user & cart on mount
+  const { cartItems } = useContext(CartContext);
+  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
+  // Fetch current user on mount
   useEffect(() => {
-    const fetchUserAndCart = async () => {
+    const fetchUser = async () => {
       try {
-        const userRes = await fetch("http://localhost:5000/api/auth/current", {
+        const res = await fetch("http://localhost:5000/api/auth/current", {
           credentials: "include",
         });
-
-        if (userRes.ok) {
-          const data = await userRes.json();
+        if (res.ok) {
+          const data = await res.json();
           setUser(data.user);
-
-          // Fetch cart only for logged-in users
-          const cartRes = await fetch("http://localhost:5000/api/cart", {
-            credentials: "include",
-          });
-          const cartData = await cartRes.json();
-          setCartItems(cartData.cart || []);
         } else {
           setUser(null);
-          setCartItems([]);
         }
       } catch (err) {
-        console.error("Error fetching user/cart:", err);
+        console.error("Error fetching user:", err);
         setUser(null);
-        setCartItems([]);
       }
     };
-
-    fetchUserAndCart();
+    fetchUser();
   }, []);
-
-  // Calculate total number of items in the cart
-  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   const handleLogout = async () => {
     setLoading(true);
@@ -67,7 +56,6 @@ export default function Navbar() {
         credentials: "include",
       });
       setUser(null);
-      setCartItems([]);
     } catch (err) {
       console.error(err);
     }
@@ -80,7 +68,12 @@ export default function Navbar() {
       <LoadingOverlay open={loading} />
       <AppBar position="static" sx={{ background: "linear-gradient(to right, #bb268c, #f0768c)" }}>
         <Toolbar sx={{ display: "flex", justifyContent: "space-between", maxWidth: 1200, mx: "auto", width: "100%" }}>
-          <Typography variant="h6" component={Link} to="/" sx={{ textDecoration: "none", color: "#fff", fontWeight: "bold" }}>
+          <Typography
+            variant="h6"
+            component={Link}
+            to="/"
+            sx={{ textDecoration: "none", color: "#fff", fontWeight: "bold" }}
+          >
             MyShop
           </Typography>
 

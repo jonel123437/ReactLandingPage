@@ -1,5 +1,5 @@
 import { Box, Typography, Button } from '@mui/material';
-import heroShoes from '../assets/hero-shoes.png';
+import heroShoes from '../../assets/hero-shoes.png';
 
 export default function Hero() {
   return (
@@ -42,9 +42,16 @@ export default function Hero() {
               fontWeight: 'bold',
               '&:hover': { backgroundColor: '#f0f0f0' },
             }}
+            onClick={() => {
+              const section = document.getElementById('our-products');
+              if (section) {
+                section.scrollIntoView({ behavior: 'smooth' });
+              }
+            }}
           >
             View All
           </Button>
+
         </Box>
 
         {/* Hero Image */}

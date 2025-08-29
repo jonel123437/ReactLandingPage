@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Typography, Button, Stack } from '@mui/material';
-import blogImage1 from '../assets/blogs1.webp';
-import blogImage2 from '../assets/blogs2.webp';
+import blogImage1 from '../../assets/blogs1.webp';
+import blogImage2 from '../../assets/blogs2.webp';
 
 const blogPosts = [
   {

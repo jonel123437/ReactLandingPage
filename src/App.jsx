@@ -3,7 +3,8 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Cart from "./pages/Cart";
 import "./styles/App.css";
-import { useState, useEffect } from "react"; // keep your imports
+import { useState, useEffect } from "react";
+import { CartProvider } from "./components/cart/CartContext"; // import CartProvider
 
 const PrivateRoute = ({ children }) => {
   const [loading, setLoading] = useState(true);
@@ -27,26 +28,28 @@ const PrivateRoute = ({ children }) => {
     checkAuth();
   }, []);
 
-  if (loading) return null; // or a loading spinner
+  if (loading) return null; // or a spinner
   return authenticated ? children : <Navigate to="/login" />;
 };
 
 function App() {
   return (
-    <Router basename="/lp">
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route
-          path="/cart"
-          element={
-            <PrivateRoute>
-              <Cart />
-            </PrivateRoute>
-          }
-        />
-      </Routes>
-    </Router>
+    <CartProvider>
+      <Router basename="/lp">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/cart"
+            element={
+              <PrivateRoute>
+                <Cart />
+              </PrivateRoute>
+            }
+          />
+        </Routes>
+      </Router>
+    </CartProvider>
   );
 }
 

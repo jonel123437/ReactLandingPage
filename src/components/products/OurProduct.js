@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Box, Typography, Grid, Tabs, Tab, Snackbar, Alert } from '@mui/material';
-import OurProductCard from './productCard/OurProductCard';
+import OurProductCard from './OurProductCard';
 import { useNavigate } from 'react-router-dom';
+import { CartContext } from "../cart/CartContext";
 
 export default function OurProducts() {
   const [tab, setTab] = useState(0);
@@ -10,6 +11,7 @@ export default function OurProducts() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const { addToCart } = useContext(CartContext);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -29,33 +31,12 @@ export default function OurProducts() {
   const handleTabChange = (event, newValue) => setTab(newValue);
 
   const handleAddToCart = async (product) => {
-    try {
-      const res = await fetch("http://localhost:5000/api/cart/add", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({
-          productId: product._id,
-          name: product.name,
-          price: product.price,
-          quantity: 1,
-          image: product.image,
-          category: product.category
-        }),
-      });
-
-      if (res.status === 401) {
-        navigate("/login");
-        return;
-      }
-
-      await res.json();
+    const success = await addToCart(product);
+    if (success) {
       setMessage(`${product.name} added to cart!`);
       setOpen(true);
-    } catch (err) {
-      console.error(err);
-      setMessage("Failed to add to cart");
-      setOpen(true);
+    } else {
+      navigate("/login");
     }
   };
 
@@ -72,7 +53,7 @@ export default function OurProducts() {
   if (loading) return <Typography align="center">Loading products...</Typography>;
 
   return (
-    <Box sx={{ mt: 12, px: 2 }}>
+    <Box id="our-products" sx={{ mt: 12, px: 2 }}>
       <Typography variant="h2" align="center" gutterBottom sx={{ fontWeight: 'bold' }}>
         Our Product
       </Typography>

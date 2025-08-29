@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Typography, Button, Stack } from '@mui/material';
-import sampleImage from '../assets/image7.png'; // replace with your image path
+import sampleImage from '../../assets/image7.png'; // replace with your image path
 
 export default function DiscountSection() {
   return (
