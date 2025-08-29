@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 
-export default function PrivateRoute() {
+export default function PrivateRoute({ role = "user" }) {
   const [authChecked, setAuthChecked] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/auth/current", {
-          credentials: "include",
-        });
+        // Determine which endpoint to check
+        const endpoint =
+          role === "admin"
+            ? "http://localhost:5000/api/admin/current"
+            : "http://localhost:5000/api/auth/current";
+
+        const res = await fetch(endpoint, { credentials: "include" });
         if (res.ok) {
           setIsAuthenticated(true);
         } else {
@@ -24,8 +28,14 @@ export default function PrivateRoute() {
     };
 
     checkAuth();
-  }, []);
+  }, [role]);
 
   if (!authChecked) return <p>Loading...</p>;
-  return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
+
+  // Redirect based on role
+  if (!isAuthenticated) {
+    return <Navigate to={role === "admin" ? "/admin/login" : "/login"} replace />;
+  }
+
+  return <Outlet />;
 }
