@@ -1,114 +1,106 @@
 import {
-  AppBar, Toolbar, Typography, Button, Box,
-  IconButton, Drawer, List, ListItem, ListItemText,
-  Badge, Menu, MenuItem
-} from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import LoadingOverlay from './LoadingOverlay'; // make sure this exists in components/
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Box,
+  IconButton,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  Badge,
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import LoadingOverlay from "./LoadingOverlay";
 
 export default function Navbar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [user, setUser] = useState(null);
-  const [anchorEl, setAnchorEl] = useState(null); // for dropdown menu
-  const [loading, setLoading] = useState(false); // loading state
+  const [cartItems, setCartItems] = useState([]);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-const [cartItems, setCartItems] = useState([]);
-
-useEffect(() => {
-  const storedCart = JSON.parse(localStorage.getItem("cart") || "[]");
-  setCartItems(storedCart);
-}, []);
-
-const cartPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
-
-
-  // On mount, check if user is logged in
+  // Fetch current user & cart on mount
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) setUser(JSON.parse(storedUser));
+    const fetchUserAndCart = async () => {
+      try {
+        const userRes = await fetch("http://localhost:5000/api/auth/current", {
+          credentials: "include",
+        });
+
+        if (userRes.ok) {
+          const data = await userRes.json();
+          setUser(data.user);
+
+          // Fetch cart only for logged-in users
+          const cartRes = await fetch("http://localhost:5000/api/cart", {
+            credentials: "include",
+          });
+          const cartData = await cartRes.json();
+          setCartItems(cartData.cart || []);
+        } else {
+          setUser(null);
+          setCartItems([]);
+        }
+      } catch (err) {
+        console.error("Error fetching user/cart:", err);
+        setUser(null);
+        setCartItems([]);
+      }
+    };
+
+    fetchUserAndCart();
   }, []);
 
-  const handleUserClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+  // Calculate total number of items in the cart
+  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
-  const handleLogout = () => {
-    setLoading(true); // show loading overlay
-    setTimeout(() => {
-      localStorage.removeItem("user");
-      localStorage.removeItem("token");
+  const handleLogout = async () => {
+    setLoading(true);
+    try {
+      await fetch("http://localhost:5000/api/auth/logout", {
+        method: "POST",
+        credentials: "include",
+      });
       setUser(null);
-      setAnchorEl(null);
-      setLoading(false); // hide loading overlay
-      navigate("/");
-    }, 200); // 0.2s delay
+      setCartItems([]);
+    } catch (err) {
+      console.error(err);
+    }
+    setLoading(false);
+    navigate("/");
   };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const links = [
-    { name: 'Home', path: '/' },
-    { name: 'About', path: '/about' },
-    { name: 'Product', path: '/products' },
-    { name: 'Support', path: '/support' },
-    !user && { name: 'Login', path: '/login' }, // show login if not logged in
-  ].filter(Boolean);
 
   return (
     <>
       <LoadingOverlay open={loading} />
-
-      <AppBar position="static" sx={{ background: 'linear-gradient(to right, #bb268c, #f0768c)' }}>
-        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', maxWidth: 1200, mx: 'auto', width: '100%' }}>
-          
-          <Typography variant="h6" component={Link} to="/" sx={{ textDecoration: 'none', color: '#fff', fontWeight: 'bold' }}>
+      <AppBar position="static" sx={{ background: "linear-gradient(to right, #bb268c, #f0768c)" }}>
+        <Toolbar sx={{ display: "flex", justifyContent: "space-between", maxWidth: 1200, mx: "auto", width: "100%" }}>
+          <Typography variant="h6" component={Link} to="/" sx={{ textDecoration: "none", color: "#fff", fontWeight: "bold" }}>
             MyShop
           </Typography>
 
-          <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 3, alignItems: 'center' }}>
-            {links.map(link => (
-              <Button
-                key={link.name}
-                component={Link}
-                to={link.path}
-                sx={{ color: '#fff', textTransform: 'none', '&:hover': { backgroundColor: 'rgba(255,255,255,0.1)' } }}
-              >
-                {link.name}
-              </Button>
-            ))}
-
-            {user && (
+          <Box sx={{ display: { xs: "none", md: "flex" }, gap: 3, alignItems: "center" }}>
+            {user ? (
               <>
-                <Button
-                  sx={{ color: '#fff', textTransform: 'none' }}
-                  onClick={handleUserClick}
-                >
-                  {user.name.charAt(0).toUpperCase() + user.name.slice(1)}
-                </Button>
-                <Menu
-                  anchorEl={anchorEl}
-                  open={Boolean(anchorEl)}
-                  onClose={handleClose}
-                >
-                  <MenuItem onClick={handleLogout}>Logout</MenuItem>
-                </Menu>
+                <Button sx={{ color: "#fff" }}>{user.name}</Button>
+                <Button onClick={handleLogout} sx={{ color: "#fff" }}>Logout</Button>
+                <IconButton onClick={() => navigate("/cart")} sx={{ color: "#fff" }}>
+                  <Badge badgeContent={totalItems} color="secondary">
+                    <ShoppingCartIcon />
+                  </Badge>
+                </IconButton>
               </>
+            ) : (
+              <Button component={Link} to="/login" sx={{ color: "#fff" }}>Login</Button>
             )}
-
-            <IconButton component={Link} to="/cart" sx={{ color: '#fff', '&:hover': { backgroundColor: 'rgba(255,255,255,0.1)' } }}>
-              <Badge badgeContent={cartPrice} color="secondary">
-                <ShoppingCartIcon />
-              </Badge>
-            </IconButton>
           </Box>
 
-          <IconButton sx={{ display: { xs: 'block', md: 'none' }, color: '#fff' }} onClick={() => setDrawerOpen(true)}>
+          <IconButton sx={{ display: { xs: "block", md: "none" }, color: "#fff" }} onClick={() => setDrawerOpen(true)}>
             <MenuIcon />
           </IconButton>
         </Toolbar>
@@ -116,22 +108,15 @@ const cartPrice = cartItems.reduce((total, item) => total + item.price * item.qu
 
       <Drawer anchor="right" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
         <List sx={{ width: 250 }}>
-          {links.map(link => (
-            <ListItem button key={link.name} component={Link} to={link.path} onClick={() => setDrawerOpen(false)}>
-              <ListItemText primary={link.name} />
-            </ListItem>
-          ))}
-
-          {user && (
-            <ListItem button onClick={handleLogout}>
-              <ListItemText primary="Logout" />
-            </ListItem>
+          {user ? (
+            <>
+              <ListItem>{user.name}</ListItem>
+              <ListItem button onClick={handleLogout}><ListItemText primary="Logout" /></ListItem>
+              <ListItem button onClick={() => navigate("/cart")}><ListItemText primary={`Cart: ${totalItems} items`} /></ListItem>
+            </>
+          ) : (
+            <ListItem button component={Link} to="/login"><ListItemText primary="Login" /></ListItem>
           )}
-
-          <ListItem button component={Link} to="/cart" onClick={() => setDrawerOpen(false)}>
-            <ShoppingCartIcon sx={{ mr: 1 }} />
-            <ListItemText primary={`Cart: $${cartPrice}`} />
-          </ListItem>
         </List>
       </Drawer>
     </>

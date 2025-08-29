@@ -1,37 +1,70 @@
 import React, { useState, useEffect } from "react";
-import Navbar from "../components/Navbar"; // make sure the path is correct
+import Navbar from "../components/Navbar";
+import CartList from "../components/CartList";
 
 export default function Cart() {
   const [cartItems, setCartItems] = useState([]);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    const storedCart = JSON.parse(localStorage.getItem("cart") || "[]");
-    setCartItems(storedCart);
+    const fetchCart = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/cart", {
+          method: "GET",
+          credentials: "include",
+        });
+        const data = await res.json();
+        setCartItems(data.cart || []);
+      } catch (err) {
+        setError("Failed to load cart items.");
+      }
+    };
+    fetchCart();
   }, []);
 
-  const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+  // Remove item from cart
+  const handleRemove = async (productId) => {
+    try {
+      const res = await fetch("http://localhost:5000/api/cart/remove", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ productId }),
+      });
+      const data = await res.json();
+      setCartItems(data.cart || []);
+    } catch {
+      setError("Failed to remove item.");
+    }
+  };
+
+  // Adjust quantity of an item
+  const handleQuantityChange = async (productId, delta) => {
+    try {
+      const res = await fetch("http://localhost:5000/api/cart/update", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ productId, delta }),
+      });
+      const data = await res.json();
+      setCartItems(data.cart || []);
+    } catch {
+      setError("Failed to update quantity.");
+    }
+  };
 
   return (
     <div>
-      <Navbar /> {/* Add the Navbar here */}
-
-      <div style={{ padding: "20px", maxWidth: "800px", margin: "0 auto" }}>
+      <Navbar />
+      <div style={{ padding: 20, maxWidth: 800, margin: "0 auto" }}>
         <h1>Your Cart</h1>
-
-        {cartItems.length === 0 ? (
-          <h2>Your cart is empty</h2>
-        ) : (
-          <>
-            {cartItems.map((item, index) => (
-              <div key={index} style={{ marginBottom: "10px" }}>
-                <p>{item.name} x {item.quantity} - ${item.price}</p>
-              </div>
-            ))}
-
-            <h3>Total: ${totalPrice}</h3>
-            <button>Checkout</button>
-          </>
-        )}
+        {error && <p style={{ color: "red" }}>{error}</p>}
+        <CartList
+          cartItems={cartItems}
+          handleRemove={handleRemove}
+          handleQuantityChange={handleQuantityChange} // pass to CartList
+        />
       </div>
     </div>
   );

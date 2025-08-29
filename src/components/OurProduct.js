@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, Grid, Tabs, Tab, Snackbar, Alert } from '@mui/material';
 import OurProductCard from './productCard/OurProductCard';
+import { useNavigate } from 'react-router-dom';
 
 export default function OurProducts() {
   const [tab, setTab] = useState(0);
@@ -8,6 +9,7 @@ export default function OurProducts() {
   const [message, setMessage] = useState('');
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -26,18 +28,35 @@ export default function OurProducts() {
 
   const handleTabChange = (event, newValue) => setTab(newValue);
 
-  const handleAddToCart = (product) => {
-    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    const existing = cart.find((item) => item.id === product.id);
-    if (existing) {
-      existing.quantity += 1;
-    } else {
-      cart.push({ ...product, quantity: 1 });
-    }
-    localStorage.setItem('cart', JSON.stringify(cart));
+  const handleAddToCart = async (product) => {
+    try {
+      const res = await fetch("http://localhost:5000/api/cart/add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          productId: product._id,
+          name: product.name,
+          price: product.price,
+          quantity: 1,
+          image: product.image,
+          category: product.category
+        }),
+      });
 
-    setMessage(`${product.name} added to cart!`);
-    setOpen(true);
+      if (res.status === 401) {
+        navigate("/login");
+        return;
+      }
+
+      await res.json();
+      setMessage(`${product.name} added to cart!`);
+      setOpen(true);
+    } catch (err) {
+      console.error(err);
+      setMessage("Failed to add to cart");
+      setOpen(true);
+    }
   };
 
   const handleClose = (event, reason) => {
@@ -68,7 +87,7 @@ export default function OurProducts() {
 
       <Grid container spacing={4} justifyContent="center">
         {filteredProducts.map((product) => (
-          <Grid item xs={12} sm={6} md={4} key={product.id}>
+          <Grid item xs={12} sm={6} md={4} key={product._id}>
             <OurProductCard product={product} onAddToCart={() => handleAddToCart(product)} />
           </Grid>
         ))}
