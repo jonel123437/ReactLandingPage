@@ -35,7 +35,8 @@ const Login = () => {
         // Optional: trigger storage event for same-tab update
         window.dispatchEvent(new Event("storage"));
 
-        setTimeout(() => navigate("/"), 200);
+        // Redirect to user homepage
+        setTimeout(() => navigate("/home"), 200);
       } else {
         setMessageType("error");
         setMessage(data.message || "Login failed");
@@ -45,6 +46,7 @@ const Login = () => {
       setMessage("Error: " + err.message);
     }
   };
+
 
   return (
     <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "80vh" }}>

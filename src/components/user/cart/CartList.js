@@ -68,7 +68,7 @@ export default function CartList({ cartItems, handleRemove, handleQuantityChange
   }).format(totalPrice);
 
   const handleShopNow = () => {
-    navigate("/");
+    navigate("/home");
     setTimeout(() => {
       const section = document.querySelector("#our-products");
       if (section) section.scrollIntoView({ behavior: "smooth" });

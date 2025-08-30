@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { AppBar, Toolbar, Typography, IconButton, Menu, MenuItem, Avatar, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-const AdminNavbar = ({ adminName }) => {
+const AdminHeader = ({ adminName }) => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -26,7 +26,7 @@ const AdminNavbar = ({ adminName }) => {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
         <Typography variant="h6">Admin Dashboard</Typography>
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
@@ -53,4 +53,4 @@ const AdminNavbar = ({ adminName }) => {
   );
 };
 
-export default AdminNavbar;
+export default AdminHeader;

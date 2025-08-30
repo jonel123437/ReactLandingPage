@@ -1,33 +1,44 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./pages/user/Home";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import LandingPage from "./pages/lp/LandingPage";
 import Login from "./pages/user/Login";
-import Cart from "./pages/user/Cart";
+import CartPage from "./pages/user/CartPage";
 import AdminLogin from "./pages/admin/LoginAdmin";
-import AdminDashboard from "./pages/admin/Dashboard";
+import Dashboard from "./pages/admin/Dashboard";
+import HomePage from "./pages/user/HomePage";
+import ProductsTable from "./pages/admin/ProductsTable";
+import AddProductPage from "./pages/admin/AddProductPage";
 import "./styles/App.css";
-import { CartProvider } from "./components/cart/CartContext";
-import PrivateRoute from "./components/common/PrivateRoute"; // updated PrivateRoute
+import { CartProvider } from "./components/user/cart/CartContext";
+import PrivateRoute from "./components/user/common/PrivateRoute";
+import EditProductPage from "./pages/admin/EditProductPage";
+
 
 function App() {
   return (
     <CartProvider>
-      <Router basename="/lp">
+      <Router>
         <Routes>
-          {/* User Routes */}
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
+          {/* ROOT REDIRECT */}
+          <Route path="/" element={<Navigate to="/login" replace />} />
 
-          {/* Protected user routes */}
+          {/* PUBLIC ROUTES */}
+          <Route path="/lp" element={<LandingPage />} />
+
+          {/* USER ROUTES */}
+          <Route path="/login" element={<Login />} />
           <Route element={<PrivateRoute />}>
-            <Route path="/cart" element={<Cart />} />
+            <Route path="/cart" element={<CartPage />} />
+            <Route path="/home" element={<HomePage />} />
           </Route>
 
-          {/* Admin Routes */}
+          {/* ADMIN ROUTES */}
           <Route path="/admin/login" element={<AdminLogin />} />
-
-          {/* Protected admin routes */}
           <Route element={<PrivateRoute role="admin" />}>
-            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/admin/*" element={<Dashboard />}>
+              <Route path="products" element={<ProductsTable />} />
+              <Route path="products/register" element={<AddProductPage />} />
+              <Route path="products/edit/:id" element={<EditProductPage />} />
+            </Route>
           </Route>
         </Routes>
       </Router>

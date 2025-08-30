@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Navbar from "../../components/common/Navbar";
-import CartList from "../../components/cart/CartList";
+import Navbar from "../../components/user/common/UserNavbar";
+import CartList from "../../components/user/cart/CartList";
 
 export default function Cart() {
   const [cartItems, setCartItems] = useState([]);

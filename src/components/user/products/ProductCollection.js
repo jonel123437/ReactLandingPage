@@ -1,5 +1,5 @@
 import { Box, Typography, Button } from '@mui/material';
-import productImage from '../../assets/new-product.png'; // replace with your image
+import productImage from '../../../assets/new-product.png'; // replace with your image
 
 export default function NewProductSection() {
   return (

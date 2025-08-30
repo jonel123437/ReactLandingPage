@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
-import AdminNavbar from "../../components/admin/AdminNavbar";
-import AdminDashboard from "../../components/admin/AdminDashboard";
+import { Box, Toolbar } from "@mui/material";
+import { Outlet } from "react-router-dom";
+
+import AdminHeader from "../../components/admin/AdminHeader";
+import AdminSidebar from "../../components/admin/AdminSidebar";
 
 export default function Dashboard() {
   const [adminName, setAdminName] = useState("");
@@ -22,9 +25,17 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div>
-      <AdminNavbar adminName={adminName} />
-      <AdminDashboard />
-    </div>
+    <Box sx={{ display: "flex" }}>
+      <AdminHeader adminName={adminName} />
+      <AdminSidebar />
+
+      {/* Main content area */}
+      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        <Toolbar />
+
+        {/* This is where nested routes (dashboard, products, register, etc.) will render */}
+        <Outlet />
+      </Box>
+    </Box>
   );
 }

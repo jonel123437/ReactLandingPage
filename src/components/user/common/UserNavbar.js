@@ -1,7 +1,6 @@
 import {
   AppBar,
   Toolbar,
-  Typography,
   Button,
   Box,
   IconButton,
@@ -10,6 +9,7 @@ import {
   ListItem,
   ListItemText,
   Badge,
+  Typography,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -18,7 +18,7 @@ import { Link, useNavigate } from "react-router-dom";
 import LoadingOverlay from "./LoadingOverlay";
 import { CartContext } from "../cart/CartContext";
 
-export default function Navbar() {
+export default function UserNavbar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -27,7 +27,6 @@ export default function Navbar() {
   const { cartItems } = useContext(CartContext);
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
-  // Fetch current user on mount
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -60,7 +59,7 @@ export default function Navbar() {
       console.error(err);
     }
     setLoading(false);
-    navigate("/");
+    navigate("/lp");
   };
 
   return (
@@ -71,7 +70,7 @@ export default function Navbar() {
           <Typography
             variant="h6"
             component={Link}
-            to="/"
+            to="/home"
             sx={{ textDecoration: "none", color: "#fff", fontWeight: "bold" }}
           >
             MyShop
@@ -89,7 +88,7 @@ export default function Navbar() {
                 </IconButton>
               </>
             ) : (
-              <Button component={Link} to="/login" sx={{ color: "#fff" }}>Login</Button>
+              <Button component={Link} to="/lp/login" sx={{ color: "#fff" }}>Login</Button>
             )}
           </Box>
 
@@ -108,7 +107,7 @@ export default function Navbar() {
               <ListItem button onClick={() => navigate("/cart")}><ListItemText primary={`Cart: ${totalItems} items`} /></ListItem>
             </>
           ) : (
-            <ListItem button component={Link} to="/login"><ListItemText primary="Login" /></ListItem>
+            <ListItem button component={Link} to="/lp/login"><ListItemText primary="Login" /></ListItem>
           )}
         </List>
       </Drawer>

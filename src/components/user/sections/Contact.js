@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Typography, TextField, Button, Grid } from "@mui/material";
-import mapImage from "../../assets/map.png"; // replace with your map image
+import mapImage from "../../../assets/map.png"; // replace with your map image
 
 export default function Contact() {
   return (
