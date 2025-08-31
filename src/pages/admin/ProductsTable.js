@@ -119,7 +119,7 @@ export default function ProductsTable() {
             {products.length > 0 ? (
               products.map((product) => (
                 <TableRow key={product._id}>
-                  <TableCell>{product._id}</TableCell>
+                  <TableCell>{product.id}</TableCell> {/* show product.id instead of _id */}
                   <TableCell>{product.name}</TableCell>
                   <TableCell>
                     <Chip
@@ -147,6 +147,7 @@ export default function ProductsTable() {
               </TableRow>
             )}
           </TableBody>
+
         </Table>
       </TableContainer>
 

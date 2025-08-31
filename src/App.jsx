@@ -9,17 +9,19 @@ import ProfilePage from "./pages/user/ProfilePage";
 import ProductsTable from "./pages/admin/ProductsTable";
 import AddProductPage from "./pages/admin/AddProductPage";
 import EditProductPage from "./pages/admin/EditProductPage";
-import PrivateRoute from "./components/user/common/PrivateRoute";
-import { CartProvider } from "./components/user/cart/CartContext";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import AddCreditCardPage from "./pages/user/AddCreditCardPage";
 import ProfileDetailsPage from "./pages/user/ProfileDetailsPage";
+import { CartProvider } from "./components/user/cart/CartContext";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
+import UserPrivateRoute from "./components/user/common/UserPrivateRoute";
+import AdminPrivateRoute from "./components/admin/AdminPrivateRoute";
+
 function App() {
   return (
-    <GoogleOAuthProvider clientId="108213073544-ik9t6j1g4vqppmvr2a3ko4b2gndm5g0v.apps.googleusercontent.com">
+    <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
       <CartProvider>
         <Router>
           <Routes>
@@ -28,20 +30,20 @@ function App() {
 
             {/* PUBLIC ROUTES */}
             <Route path="/lp" element={<LandingPage />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/admin/login" element={<AdminLogin />} />
 
             {/* USER ROUTES */}
-            <Route path="/login" element={<Login />} />
-            <Route element={<PrivateRoute />}>
+            <Route element={<UserPrivateRoute />}>
               <Route path="/cart" element={<CartPage />} />
               <Route path="/home" element={<HomePage />} />
-              <Route path="/profile" element={<ProfilePage />} />          
+              <Route path="/profile" element={<ProfilePage />} />
               <Route path="/profile/details" element={<ProfileDetailsPage />} />
               <Route path="/profile/add-card" element={<AddCreditCardPage />} />
             </Route>
 
             {/* ADMIN ROUTES */}
-            <Route path="/admin/login" element={<AdminLogin />} />
-            <Route element={<PrivateRoute role="admin" />}>
+            <Route element={<AdminPrivateRoute />}>
               <Route path="/admin/*" element={<Dashboard />}>
                 <Route path="products" element={<ProductsTable />} />
                 <Route path="products/register" element={<AddProductPage />} />
