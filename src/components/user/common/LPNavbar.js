@@ -11,7 +11,7 @@ export default function LPNavbar() {
           to="/lp"
           sx={{ textDecoration: "none", color: "#fff", fontWeight: "bold" }}
         >
-          MyShop
+          Shopatos
         </Typography>
 
         <Box sx={{ display: { xs: "none", md: "flex" }, gap: 3, alignItems: "center" }}>

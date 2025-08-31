@@ -30,7 +30,7 @@ export default function LoginAdmin() {
         setMessageType("success");
         setMessage("Login successful!");
 
-        setTimeout(() => navigate("/admin/dashboard"), 200);
+        setTimeout(() => navigate("/admin/products"), 200);
       } else {
         setMessageType("error");
         setMessage(data.message || "Login failed");

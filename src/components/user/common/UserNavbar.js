@@ -73,7 +73,7 @@ export default function UserNavbar() {
             to="/home"
             sx={{ textDecoration: "none", color: "#fff", fontWeight: "bold" }}
           >
-            MyShop
+            Shopatos
           </Typography>
 
           <Box sx={{ display: { xs: "none", md: "flex" }, gap: 3, alignItems: "center" }}>
@@ -118,11 +118,11 @@ export default function UserNavbar() {
               <ListItem button onClick={() => { navigate("/profile"); setDrawerOpen(false); }}>
                 <ListItemText primary={user.name} />
               </ListItem>
-              <ListItem button onClick={() => { handleLogout(); setDrawerOpen(false); }}>
-                <ListItemText primary="Logout" />
-              </ListItem>
               <ListItem button onClick={() => { navigate("/cart"); setDrawerOpen(false); }}>
                 <ListItemText primary={`Cart: ${totalItems} items`} />
+              </ListItem>
+              <ListItem button onClick={() => { handleLogout(); setDrawerOpen(false); }}>
+                <ListItemText primary="Logout" />
               </ListItem>
             </>
           ) : (

@@ -15,6 +15,7 @@ import {
   IconButton,
   Snackbar,
   Alert,
+  Chip,
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useNavigate } from "react-router-dom";
@@ -64,7 +65,7 @@ export default function ProductsTable() {
         credentials: "include",
       });
       if (res.ok) {
-        setProducts((prev) => prev.filter((p) => p.id !== id));
+        setProducts((prev) => prev.filter((p) => p._id !== id));
         setToastMessage("Product deleted successfully!");
         setToastOpen(true);
       } else {
@@ -73,6 +74,20 @@ export default function ProductsTable() {
       }
     } catch (err) {
       console.error("Error deleting product:", err);
+    }
+  };
+
+  // Function to decide chip color based on category
+  const getChipColor = (category) => {
+    switch (category?.toLowerCase()) {
+      case "new":
+        return "success"; // green
+      case "trending":
+        return "warning"; // orange
+      case "all":
+        return "info"; // blue
+      default:
+        return "default"; // grey for unknown categories
     }
   };
 
@@ -104,9 +119,15 @@ export default function ProductsTable() {
             {products.length > 0 ? (
               products.map((product) => (
                 <TableRow key={product._id}>
-                  <TableCell>{product.id}</TableCell>
+                  <TableCell>{product._id}</TableCell>
                   <TableCell>{product.name}</TableCell>
-                  <TableCell>{product.category || "N/A"}</TableCell>
+                  <TableCell>
+                    <Chip
+                      label={product.category || "N/A"}
+                      color={getChipColor(product.category)}
+                      size="small"
+                    />
+                  </TableCell>
                   <TableCell align="right">{product.price}</TableCell>
                   <TableCell align="center">
                     <IconButton
@@ -138,21 +159,20 @@ export default function ProductsTable() {
       >
         <MenuItem
           onClick={() => {
-            navigate(`/admin/products/edit/${selectedProduct?.id}`);
+            navigate(`/admin/products/edit/${selectedProduct?._id}`);
             handleMenuClose();
           }}
         >
           Edit
         </MenuItem>
         <MenuItem
-          onClick={() => handleDelete(selectedProduct?.id)}
+          onClick={() => handleDelete(selectedProduct?._id)}
           sx={{ color: "red" }}
         >
           Delete
         </MenuItem>
       </Menu>
 
-      {/* Toast Snackbar */}
       <Snackbar
         open={toastOpen}
         autoHideDuration={3000}
