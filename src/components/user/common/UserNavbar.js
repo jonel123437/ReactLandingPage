@@ -79,8 +79,18 @@ export default function UserNavbar() {
           <Box sx={{ display: { xs: "none", md: "flex" }, gap: 3, alignItems: "center" }}>
             {user ? (
               <>
-                <Button sx={{ color: "#fff" }}>{user.name}</Button>
-                <Button onClick={handleLogout} sx={{ color: "#fff" }}>Logout</Button>
+                {/* Make user's name clickable to go to ProfilePage */}
+                <Button
+                  sx={{ color: "#fff" }}
+                  onClick={() => navigate("/profile")} // redirect to /profile route
+                >
+                  {user.name}
+                </Button>
+
+                <Button onClick={handleLogout} sx={{ color: "#fff" }}>
+                  Logout
+                </Button>
+
                 <IconButton onClick={() => navigate("/cart")} sx={{ color: "#fff" }}>
                   <Badge badgeContent={totalItems} color="secondary">
                     <ShoppingCartIcon />
@@ -88,8 +98,11 @@ export default function UserNavbar() {
                 </IconButton>
               </>
             ) : (
-              <Button component={Link} to="/lp/login" sx={{ color: "#fff" }}>Login</Button>
+              <Button component={Link} to="/lp/login" sx={{ color: "#fff" }}>
+                Login
+              </Button>
             )}
+
           </Box>
 
           <IconButton sx={{ display: { xs: "block", md: "none" }, color: "#fff" }} onClick={() => setDrawerOpen(true)}>

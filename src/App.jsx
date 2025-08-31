@@ -1,16 +1,20 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import LandingPage from "./pages/lp/LandingPage";
+import "./styles/App.css";
 import Login from "./pages/user/Login";
 import CartPage from "./pages/user/CartPage";
-import AdminLogin from "./pages/admin/LoginAdmin";
-import Dashboard from "./pages/admin/Dashboard";
 import HomePage from "./pages/user/HomePage";
+import Dashboard from "./pages/admin/Dashboard";
+import LandingPage from "./pages/lp/LandingPage";
+import AdminLogin from "./pages/admin/LoginAdmin";
+import ProfilePage from "./pages/user/ProfilePage";
 import ProductsTable from "./pages/admin/ProductsTable";
 import AddProductPage from "./pages/admin/AddProductPage";
-import "./styles/App.css";
-import { CartProvider } from "./components/user/cart/CartContext";
-import PrivateRoute from "./components/user/common/PrivateRoute";
 import EditProductPage from "./pages/admin/EditProductPage";
+import PrivateRoute from "./components/user/common/PrivateRoute";
+import { CartProvider } from "./components/user/cart/CartContext";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+
+import AddCreditCardPage from "./pages/user/AddCreditCardPage";
+import ProfileDetailsPage from "./pages/user/ProfileDetailsPage";
 
 
 function App() {
@@ -19,7 +23,7 @@ function App() {
       <Router>
         <Routes>
           {/* ROOT REDIRECT */}
-          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/" element={<Navigate to="/lp" replace />} />
 
           {/* PUBLIC ROUTES */}
           <Route path="/lp" element={<LandingPage />} />
@@ -29,6 +33,9 @@ function App() {
           <Route element={<PrivateRoute />}>
             <Route path="/cart" element={<CartPage />} />
             <Route path="/home" element={<HomePage />} />
+            <Route path="/profile" element={<ProfilePage />} />          
+            <Route path="/profile/details" element={<ProfileDetailsPage />} />
+            <Route path="/profile/add-card" element={<AddCreditCardPage />} />
           </Route>
 
           {/* ADMIN ROUTES */}
