@@ -208,7 +208,7 @@ export default function AddProductPage() {
       </Paper>
 
       {/* Buttons bottom-right */}
-      <Box sx={{ position: "fixed", bottom: 16, right: 16 }}>
+      <Box sx={{ mt: 3, display: "flex", justifyContent: "flex-end" }}>
         <Stack direction="row" spacing={2}>
           <Button variant="outlined" onClick={() => navigate("/admin/products")}>
             Cancel

@@ -62,9 +62,9 @@ export default function CartList({ cartItems, handleRemove, handleQuantityChange
       0
     );
 
-  const totalPriceFormatted = new Intl.NumberFormat("en-US", {
+  const totalPriceFormatted = new Intl.NumberFormat("en-PH", {
     style: "currency",
-    currency: "USD",
+    currency: "PHP",
   }).format(totalPrice);
 
   const handleShopNow = () => {
@@ -129,7 +129,7 @@ export default function CartList({ cartItems, handleRemove, handleQuantityChange
               </ListItemAvatar>
               <ListItemText
                 primary={item.name}
-                secondary={`$${Number(item.price.replace("$", "")).toFixed(2)} x ${item.quantity}`}
+                secondary={`₱${Number(item.price).toFixed(2)} x ${item.quantity}`}
               />
               <Box sx={{ display: "flex", alignItems: "center", ml: 2 }}>
                 <Tooltip title={item.quantity <= 1 ? "Minimum quantity is 1" : ""}>

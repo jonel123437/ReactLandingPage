@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import { Box, Typography, Button, Card, CardMedia, CardContent, Snackbar, Alert } from '@mui/material';
 import { CartContext } from "../cart/CartContext";
 import { useNavigate } from 'react-router-dom';
+import featuredImg from '../../../assets/featured.png'; // ✅ import static image
 
 export default function FeaturedVideo() {
   const { addToCart } = useContext(CartContext);
@@ -9,12 +10,12 @@ export default function FeaturedVideo() {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState('');
 
+  // Static product object
   const product = {
-    id: "68b10f8b0400b3406e6006b1",
     name: "Zenitsu Agatsuma Sneakers - Demon Slayer™",
-    price: "$44.99",
-    subtitle: "Short description",
-    image: "/images/image5.png",
+    price: 44.99, 
+    subtitle: "Comfortable and stylish sneakers",
+    image: featuredImg, 
     category: "Trending"
   };
 
@@ -65,14 +66,14 @@ export default function FeaturedVideo() {
         <CardMedia
           component="img"
           height="200"
-          image={`${process.env.PUBLIC_URL}${product.image}`}
+          image={product.image} // ✅ static imported image
           alt={product.name}
           sx={{ objectFit: 'contain', p: 1 }}
         />
         <CardContent>
           <Typography variant="h6" sx={{ fontWeight: 'bold' }}>{product.name}</Typography>
           <Typography variant="body2" color="text.secondary">{product.subtitle}</Typography>
-          <Typography variant="h6" sx={{ mt: 1 }}>{product.price}</Typography>
+          <Typography variant="h6" sx={{ mt: 1 }}>₱{product.price.toFixed(2)}</Typography> {/* PHP sign */}
           <Button
             variant="contained"
             sx={{ mt: 2, backgroundColor: '#414041', color: '#fff', '&:hover': { backgroundColor: '#333' } }}

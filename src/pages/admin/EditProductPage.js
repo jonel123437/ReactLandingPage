@@ -200,7 +200,7 @@ export default function EditProductPage() {
             <Box display="flex" flexDirection="column" gap={2}>
               {/* Label + Button on same line */}
               <Box display="flex" alignItems="center" gap={5}>
-                <Typography sx={{ minWidth: 120 }}>Image</Typography>
+                <RequiredLabel text="Image" />
                 <Button variant="contained" component="label" sx={{ width: 150 }}>
                   {formData.image ? formData.image.name : "Change Image"}
                   <input
@@ -234,7 +234,7 @@ export default function EditProductPage() {
       </Paper>
 
       {/* Buttons bottom-right */}
-      <Box sx={{ position: "fixed", bottom: 16, right: 16 }}>
+      <Box sx={{ mt: 3, display: "flex", justifyContent: "flex-end" }}>
         <Stack direction="row" spacing={2}>
           <Button variant="outlined" onClick={() => navigate("/admin/products")}>
             Cancel

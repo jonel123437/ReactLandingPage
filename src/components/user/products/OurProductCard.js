@@ -37,15 +37,19 @@ export default function OurProductCard({ product, onAddToCart }) {
         >
           {product.name}
         </Typography>
+
+        {/* Price with PHP sign */}
         <Typography variant="subtitle1" sx={{ mt: 1, fontWeight: 'bold' }}>
-          {product.price}
-        </Typography>
+  ₱{Number(product.price).toFixed(2)}
+</Typography>
+
         {product.subtitle && (
           <Typography variant="subtitle2" color="text.secondary">
             {product.subtitle}
           </Typography>
         )}
       </CardContent>
+
 
       <CardActions sx={{ justifyContent: 'center' }}>
         <Button

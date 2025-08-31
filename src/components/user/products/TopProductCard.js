@@ -20,7 +20,7 @@ export default function TopProductCard({ product, onAddToCart }) {
     >
       <CardMedia
         component="img"
-        image={`${process.env.PUBLIC_URL}${product.image}`} // ✅ fixed
+        image={product.image} // use imported image directly
         alt={product.name}
         sx={{
           width: 250,
@@ -46,15 +46,19 @@ export default function TopProductCard({ product, onAddToCart }) {
         >
           {product.name}
         </Typography>
-        <Typography variant="subtitle2" sx={{ mt: 1, fontWeight: 'bold' }}>
-          {product.price}
+        
+        {/* Price in PHP */}
+        <Typography variant="subtitle1" sx={{ mt: 1, fontWeight: 'bold' }}>
+          ₱{product.price.toFixed(2)}
         </Typography>
+
         {product.subtitle && (
           <Typography variant="body2" sx={{ color: '#fff' }}>
             {product.subtitle}
           </Typography>
         )}
       </CardContent>
+
 
       <CardActions sx={{ justifyContent: 'center' }}>
         <Button
@@ -65,7 +69,7 @@ export default function TopProductCard({ product, onAddToCart }) {
             color: '#fff',
             '&:hover': { backgroundColor: '#414041 !important', boxShadow: 'none' },
           }}
-          onClick={() => onAddToCart(product)} // pass the full product
+          onClick={() => onAddToCart(product)}
         >
           Add to Cart
         </Button>
