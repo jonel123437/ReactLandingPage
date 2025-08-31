@@ -53,7 +53,7 @@ export default function OurProducts() {
   if (loading) return <Typography align="center">Loading products...</Typography>;
 
   return (
-    <Box id="our-products" sx={{ mt: 12, px: 2 }}>
+    <Box id="our-products" sx={{ mt: 12, px: 2, pb: 4 }}>
       <Typography variant="h2" align="center" gutterBottom sx={{ fontWeight: 'bold' }}>
         Our Product
       </Typography>

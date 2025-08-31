@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Card, CardContent, TextField, Button, Typography, Alert } from "@mui/material";
+import { Box, Card, CardContent, TextField, Button, Typography, Alert, Divider } from "@mui/material";
+import { GoogleLogin } from "@react-oauth/google";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -9,6 +10,7 @@ const Login = () => {
   const [messageType, setMessageType] = useState("success");
   const navigate = useNavigate();
 
+  // Regular email/password login
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -25,17 +27,13 @@ const Login = () => {
       } catch {}
 
       if (res.ok) {
-        // Store user info and token for Navbar
         localStorage.setItem("user", JSON.stringify(data.user));
         localStorage.setItem("token", data.token);
 
         setMessageType("success");
         setMessage("Login successful!");
 
-        // Optional: trigger storage event for same-tab update
         window.dispatchEvent(new Event("storage"));
-
-        // Redirect to user homepage
         setTimeout(() => navigate("/home"), 200);
       } else {
         setMessageType("error");
@@ -47,6 +45,34 @@ const Login = () => {
     }
   };
 
+  // Google login handler
+  const handleGoogleLogin = async (credentialResponse) => {
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/google", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ token: credentialResponse.credential }),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        localStorage.setItem("user", JSON.stringify(data.user));
+        localStorage.setItem("token", data.token);
+
+        setMessageType("success");
+        setMessage("Google login successful!");
+        window.dispatchEvent(new Event("storage"));
+        setTimeout(() => navigate("/home"), 200);
+      } else {
+        setMessageType("error");
+        setMessage(data.message || "Google login failed");
+      }
+    } catch (err) {
+      setMessageType("error");
+      setMessage("Error: " + err.message);
+    }
+  };
 
   return (
     <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "80vh" }}>
@@ -54,6 +80,8 @@ const Login = () => {
         <CardContent>
           <Typography variant="h5" sx={{ mb: 2, textAlign: "center" }}>Login</Typography>
           {message && <Alert severity={messageType} sx={{ mb: 2 }}>{message}</Alert>}
+
+          {/* Email/password login form */}
           <form onSubmit={handleSubmit}>
             <TextField
               label="Email"
@@ -75,6 +103,18 @@ const Login = () => {
             />
             <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>Login</Button>
           </form>
+
+          {/* Divider */}
+          <Divider sx={{ my: 3 }}>OR</Divider>
+
+          {/* Google login button */}
+          <GoogleLogin
+            onSuccess={handleGoogleLogin}
+            onError={() => {
+              setMessageType("error");
+              setMessage("Google login failed");
+            }}
+          />
         </CardContent>
       </Card>
     </Box>

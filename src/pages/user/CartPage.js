@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../../components/user/common/UserNavbar";
 import CartList from "../../components/user/cart/CartList";
+import { Typography } from "@mui/material";
 
 export default function Cart() {
   const [cartItems, setCartItems] = useState([]);
@@ -57,8 +58,10 @@ export default function Cart() {
   return (
     <div>
       <Navbar />
-      <div style={{ padding: 20, maxWidth: 800, margin: "0 auto" }}>
-        <h1>Your Cart</h1>
+      <div style={{ padding: 20, width: "100%", margin: "0 auto" }}>
+        <Typography variant="h4" gutterBottom>
+          Your Cart
+        </Typography>
         {error && <p style={{ color: "red" }}>{error}</p>}
         <CartList
           cartItems={cartItems}

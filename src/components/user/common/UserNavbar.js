@@ -115,15 +115,24 @@ export default function UserNavbar() {
         <List sx={{ width: 250 }}>
           {user ? (
             <>
-              <ListItem>{user.name}</ListItem>
-              <ListItem button onClick={handleLogout}><ListItemText primary="Logout" /></ListItem>
-              <ListItem button onClick={() => navigate("/cart")}><ListItemText primary={`Cart: ${totalItems} items`} /></ListItem>
+              <ListItem button onClick={() => { navigate("/profile"); setDrawerOpen(false); }}>
+                <ListItemText primary={user.name} />
+              </ListItem>
+              <ListItem button onClick={() => { handleLogout(); setDrawerOpen(false); }}>
+                <ListItemText primary="Logout" />
+              </ListItem>
+              <ListItem button onClick={() => { navigate("/cart"); setDrawerOpen(false); }}>
+                <ListItemText primary={`Cart: ${totalItems} items`} />
+              </ListItem>
             </>
           ) : (
-            <ListItem button component={Link} to="/lp/login"><ListItemText primary="Login" /></ListItem>
+            <ListItem button component={Link} to="/lp/login">
+              <ListItemText primary="Login" />
+            </ListItem>
           )}
         </List>
       </Drawer>
+
     </>
   );
 }
