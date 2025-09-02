@@ -79,18 +79,28 @@ export default function UserNavbar() {
           <Box sx={{ display: { xs: "none", md: "flex" }, gap: 3, alignItems: "center" }}>
             {user ? (
               <>
-                {/* Make user's name clickable to go to ProfilePage */}
+                {/* User's name */}
                 <Button
                   sx={{ color: "#fff" }}
-                  onClick={() => navigate("/profile")} // redirect to /profile route
+                  onClick={() => navigate("/profile")}
                 >
                   {user.name}
                 </Button>
 
+                {/* My Orders */}
+                <Button
+                  sx={{ color: "#fff" }}
+                  onClick={() => navigate("/my-order")} // new route for user orders
+                >
+                  My Orders
+                </Button>
+
+                {/* Logout */}
                 <Button onClick={handleLogout} sx={{ color: "#fff" }}>
                   Logout
                 </Button>
 
+                {/* Cart */}
                 <IconButton onClick={() => navigate("/cart")} sx={{ color: "#fff" }}>
                   <Badge badgeContent={totalItems} color="secondary">
                     <ShoppingCartIcon />
@@ -102,6 +112,7 @@ export default function UserNavbar() {
                 Login
               </Button>
             )}
+
 
           </Box>
 

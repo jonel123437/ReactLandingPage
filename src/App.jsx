@@ -10,6 +10,7 @@ import ProductsTable from "./pages/admin/ProductsTable";
 import AddProductPage from "./pages/admin/AddProductPage";
 import EditProductPage from "./pages/admin/EditProductPage";
 import AddCreditCardPage from "./pages/user/AddCreditCardPage";
+import MyOrderPage from "./pages/user/MyOrderPage";
 import CardList from "./pages/user/CardListPage";
 import ProfileDetailsPage from "./pages/user/ProfileDetailsPage";
 import { CartProvider } from "./components/user/cart/CartContext";
@@ -27,7 +28,7 @@ function App() {
         <Router>
           <Routes>
             {/* ROOT REDIRECT */}
-            <Route path="/" element={<Navigate to="/lp" replace />} />
+            <Route path="/" element={<Navigate to="/login" replace />} />
 
             {/* PUBLIC ROUTES */}
             <Route path="/lp" element={<LandingPage />} />
@@ -38,6 +39,7 @@ function App() {
             <Route element={<UserPrivateRoute />}>
               <Route path="/cart" element={<CartPage />} />
               <Route path="/home" element={<HomePage />} />
+              <Route path="/my-order" element={<MyOrderPage />} />
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/profile/details" element={<ProfileDetailsPage />} />
               <Route path="/profile/card-list" element={<CardList />} />
