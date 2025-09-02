@@ -8,7 +8,7 @@ const ProfileMenu = () => {
 
   const menuItems = [
     { label: "Profile Details", path: "/profile/details" },
-    { label: "Add Credit Card", path: "/profile/add-card" },
+    { label: "Credit Card List", path: "/profile/card-list" },
   ];
 
   return (

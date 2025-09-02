@@ -27,7 +27,7 @@ export default function ProfileDetailsPage() {
   if (!user) return <div>User not logged in.</div>;
 
   return (
-    <div className="profile-page">
+    <div className="profile-details-page">
       <Navbar />
       <main>
         <ProfileDetails user={user} />

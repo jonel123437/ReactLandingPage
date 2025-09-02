@@ -10,6 +10,7 @@ import ProductsTable from "./pages/admin/ProductsTable";
 import AddProductPage from "./pages/admin/AddProductPage";
 import EditProductPage from "./pages/admin/EditProductPage";
 import AddCreditCardPage from "./pages/user/AddCreditCardPage";
+import CardList from "./pages/user/CardListPage";
 import ProfileDetailsPage from "./pages/user/ProfileDetailsPage";
 import { CartProvider } from "./components/user/cart/CartContext";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
@@ -39,6 +40,7 @@ function App() {
               <Route path="/home" element={<HomePage />} />
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/profile/details" element={<ProfileDetailsPage />} />
+              <Route path="/profile/card-list" element={<CardList />} />
               <Route path="/profile/add-card" element={<AddCreditCardPage />} />
             </Route>
 
